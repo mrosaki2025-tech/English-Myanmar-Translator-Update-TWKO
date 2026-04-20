@@ -26,17 +26,41 @@ export async function transcribeAudio(base64Audio: string, mimeType: string): Pr
   }
 }
 
-export async function translateText(text: string, direction: 'en-my' | 'my-en'): Promise<string> {
+export type LanguageCode = 'en' | 'my' | 'ko' | 'ja' | 'zh' | 'th';
+
+const languageNames: Record<LanguageCode, string> = {
+  en: 'English',
+  my: 'Burmese (Unicode)',
+  ko: 'Korean',
+  ja: 'Japanese',
+  zh: 'Chinese (Mandarin)',
+  th: 'Thai'
+};
+
+export async function translateText(text: string, targetLang: LanguageCode): Promise<string> {
   try {
-    const targetLang = direction === 'en-my' ? 'Burmese (Unicode)' : 'English';
+    const targetName = languageNames[targetLang];
     const response = await ai.models.generateContent({
       model: "gemini-3-flash-preview",
-      contents: `Translate the following text to ${targetLang}. Provide a high-quality, natural translation. Only return the translated text.\n\nText: ${text}`,
+      contents: `Translate the following text to ${targetName}. Provide a high-quality, natural translation. Only return the translated text.\n\nText: ${text}`,
     });
     return response.text ?? "Translation failed.";
   } catch (error) {
     console.error("Translation Error:", error);
     throw new Error("Failed to translate text.");
+  }
+}
+
+export async function summarizeText(text: string): Promise<string> {
+  try {
+    const response = await ai.models.generateContent({
+      model: "gemini-3-flash-preview",
+      contents: `Summarize the following text in Burmese. Provide a clear, concise bullet-point summary capturing all key points and meeting notes if applicable. Only return the summary.\n\nText: ${text}`,
+    });
+    return response.text ?? "Summarization failed.";
+  } catch (error) {
+    console.error("Summarization Error:", error);
+    throw new Error("Failed to summarize text.");
   }
 }
 
