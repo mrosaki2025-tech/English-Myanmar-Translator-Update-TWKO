@@ -1,0 +1,8 @@
+{
+  "name": "Audio To Text & Translator",
+  "description": "အသံဖိုင် သို့မဟုတ် မိုက်ကရိုဖုန်းမှ စကားပြောများကို မြန်မာစာသားအဖြစ် တိကျစွာ ပြောင်းလဲပေးနိုင်သော App ဖြစ်ပါသည်။",
+  "requestFramePermissions": [
+    "microphone"
+  ],
+  "majorCapabilities": []
+}
